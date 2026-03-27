@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.gameboard.domain.enums.Role;
+
 @Entity
 @Table(name = "app_user")
 public class AppUser {
@@ -24,9 +26,6 @@ public class AppUser {
 
     @Column(name = "email_verified", nullable = false)
     private Boolean emailVerified;
-
-    @Column(nullable = false)
-    private String username;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

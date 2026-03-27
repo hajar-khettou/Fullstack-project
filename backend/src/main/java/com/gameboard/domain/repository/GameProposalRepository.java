@@ -1,3 +1,4 @@
+package com.gameboard.domain.repository;
 // GameProposalRepository;
 
 import org.springframework.data.jpa.repository.JpaRepository;

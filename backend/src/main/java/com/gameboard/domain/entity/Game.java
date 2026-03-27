@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import com.gameboard.domain.enums.GameStatus;
+
 @Entity
 @Table(name = "game")
 public class Game {

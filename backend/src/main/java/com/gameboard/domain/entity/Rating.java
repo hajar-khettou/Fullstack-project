@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+
 @Entity
 @Table(
     name = "rating",
