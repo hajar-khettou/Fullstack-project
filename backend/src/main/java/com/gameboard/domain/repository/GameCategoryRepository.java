@@ -1,3 +1,4 @@
+package com.gameboard.domain.repository;
 // GameCategoryRepository;
 
 import org.springframework.data.jpa.repository.JpaRepository;

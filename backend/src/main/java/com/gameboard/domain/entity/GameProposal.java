@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.gameboard.domain.enums.ProposalStatus;
+
 @Entity
 @Table(name = "game_proposal")
 public class GameProposal {
