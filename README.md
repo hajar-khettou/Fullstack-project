@@ -7,7 +7,7 @@ Projet Fullstack S8 — APC
 | Nom | GitHub |
 |-----|--------|
 | Amina SERRANO | à compléter |
-| Christina LOPES | à compléter |
+| Christina LOPES |[@atina92](https://github.com/atina92) |
 | Hajar KHETTOU | [@hajar-khettou](https://github.com/hajar-khettou) |
 | Lyna MEDJEDOUB | à compléter |
 | Rawane OUFFA | à compléter |
