@@ -1,1 +1,49 @@
-<p>game-detail works!</p>
+<div class="container">
+  <a routerLink="/" class="btn-back">← Retour à la liste</a>
+
+  <p *ngIf="loading">Chargement...</p>
+
+  <div *ngIf="game" class="detail-card">
+    <div class="detail-header">
+      <img [src]="game.imageUrl || 'assets/placeholder.png'" [alt]="game.title" />
+      <div class="detail-info">
+        <h1>{{ game.title }}</h1>
+        <p class="meta">📅 {{ game.year }}</p>
+        <p class="meta">👥 {{ game.minPlayers }} - {{ game.maxPlayers }} joueurs</p>
+        <p class="meta rating">⭐ {{ game.averageRating | number:'1.1-1' }} / 5</p>
+        <p class="description">{{ game.description }}</p>
+      </div>
+    </div>
+
+    <!-- Formulaire de notation -->
+    <div class="rating-form">
+      <h2>Noter ce jeu</h2>
+
+      <div *ngIf="ratingSubmitted" class="success">
+        ✅ Merci pour votre note !
+      </div>
+
+      <div *ngIf="!ratingSubmitted">
+        <div class="form-group">
+          <label>Note (1 à 5)</label>
+          <select [(ngModel)]="newRating.score">
+            <option [value]="1">⭐ 1</option>
+            <option [value]="2">⭐⭐ 2</option>
+            <option [value]="3">⭐⭐⭐ 3</option>
+            <option [value]="4">⭐⭐⭐⭐ 4</option>
+            <option [value]="5">⭐⭐⭐⭐⭐ 5</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Commentaire (optionnel)</label>
+          <textarea
+            [(ngModel)]="newRating.comment"
+            placeholder="Votre avis sur ce jeu..."
+            rows="3">
+          </textarea>
+        </div>
+        <button (click)="submitRating()" class="btn-submit">Envoyer ma note</button>
+      </div>
+    </div>
+  </div>
+</div>

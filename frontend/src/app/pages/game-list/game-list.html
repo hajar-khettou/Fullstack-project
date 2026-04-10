@@ -1,1 +1,39 @@
-<p>game-list works!</p>
+<div class="container">
+  <h1>🎲 GameYo</h1>
+  <p class="subtitle">Découvrez et notez vos jeux de société</p>
+
+  <!-- Barre de recherche -->
+  <div class="search-bar">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      placeholder="Rechercher un jeu..."
+      (keyup.enter)="search()"
+    />
+    <button (click)="search()">Rechercher</button>
+  </div>
+
+  <div class="propose-bar">
+    <a routerLink="/propose" class="btn-propose">+ Proposer un jeu</a>
+  </div>
+
+  <!-- Chargement -->
+  <p *ngIf="loading">Chargement...</p>
+
+  <!-- Liste des jeux -->
+  <div class="game-grid">
+    <div class="game-card" *ngFor="let game of games">
+      <img [src]="game.imageUrl || 'assets/placeholder.png'" [alt]="game.title" />
+      <div class="game-info">
+        <h2>{{ game.title }}</h2>
+        <p class="year">{{ game.year }}</p>
+        <p class="players">👥 {{ game.minPlayers }} - {{ game.maxPlayers }} joueurs</p>
+        <p class="rating">⭐ {{ game.averageRating | number:'1.1-1' }}</p>
+        <a [routerLink]="['/games', game.id]" class="btn-detail">Voir la fiche</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Aucun résultat -->
+  <p *ngIf="!loading && games.length === 0">Aucun jeu trouvé.</p>
+</div>
