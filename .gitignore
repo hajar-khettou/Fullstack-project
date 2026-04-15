@@ -13,7 +13,8 @@ target/
 
 # Spring Boot
 *.log
-application-local.properties
+# Surcharges locales optionnelles (non versionnées)
+application-local-overrides.properties
 
 # Node / Angular
 node_modules/
@@ -22,3 +23,5 @@ dist/
 # OS
 .DS_Store
 Thumbs.db
+
+.env
