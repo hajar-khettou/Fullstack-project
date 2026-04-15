@@ -22,6 +22,7 @@ public class BoardGame {
     private String imageUrl;
     private Integer minPlayers;
     private Integer maxPlayers;
+    @Column(name = "release_year")
     private Integer year;
     private Double averageRating;
 
