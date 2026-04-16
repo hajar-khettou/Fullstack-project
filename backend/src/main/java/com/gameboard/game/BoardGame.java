@@ -20,10 +20,13 @@ public class BoardGame {
     private String description;
 
     private String imageUrl;
+    private String genre;
     private Integer minPlayers;
     private Integer maxPlayers;
+
     @Column(name = "release_year")
     private Integer year;
+
     private Double averageRating;
 
     @Enumerated(EnumType.STRING)
