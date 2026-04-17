@@ -20,6 +20,11 @@ application-local-overrides.properties
 node_modules/
 dist/
 
+# Cypress
+frontend/cypress/screenshots/
+frontend/cypress/videos/
+frontend/cypress/downloads/
+
 # OS
 .DS_Store
 Thumbs.db
