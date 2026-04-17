@@ -1,7 +1,45 @@
-.container {
-  max-width: 960px;
-  margin: 0 auto;
+.admin-page {
   padding: 2.5rem 2rem 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.admin-header {
+  margin-bottom: 2rem;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.admin-col {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+  min-height: 400px;
+}
+
+.col-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.col-icon { font-size: 1.4rem; }
+
+.col-header h2 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0;
 }
 
 .btn-back {
@@ -21,12 +59,12 @@
 
 .btn-back:hover { background: rgba(99,102,241,0.15); }
 
-h1 {
+.admin-header h1 {
   font-size: 2rem;
   font-weight: 800;
   color: var(--text);
   letter-spacing: -0.5px;
-  margin-bottom: 1.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .msg {
@@ -253,3 +291,125 @@ h1 {
   gap: 0.75rem;
   justify-content: center;
 }
+
+.user-toolbar {
+  margin-bottom: 1rem;
+}
+
+.btn-add-user {
+  padding: 0.6rem 1.4rem;
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 700;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(139,92,246,0.3);
+}
+
+.btn-add-user:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(139,92,246,0.4);
+}
+
+.user-form-card {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.user-form-card h3 {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.user-form-fields {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.user-form-fields input,
+.user-form-fields select {
+  flex: 1;
+  min-width: 150px;
+  padding: 0.7rem 0.9rem;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.user-form-fields input:focus,
+.user-form-fields select:focus {
+  border-color: var(--primary);
+}
+
+.user-form-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.user-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.user-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.user-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.user-role-badge {
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.role-user { background: #eff6ff; color: #3b82f6; border: 1px solid rgba(59,130,246,0.2); }
+.role-editor { background: #f5f3ff; color: #8b5cf6; border: 1px solid rgba(139,92,246,0.2); }
+.role-webmaster { background: #ecfdf5; color: var(--success); border: 1px solid rgba(16,185,129,0.2); }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { GameService } from '../../core/services/game';
+import { UserService, AppUser } from '../../core/services/user.service';
 import { BoardGame, Page } from '../../models/game.model';
 
 @Component({
@@ -22,11 +23,20 @@ export class AdminComponent implements OnInit {
   editingGame: BoardGame | null = null;
   gameToDelete: BoardGame | null = null;
 
-  constructor(private gameService: GameService) {}
+  users: AppUser[] = [];
+  userToDelete: AppUser | null = null;
+  editingUser: AppUser | null = null;
+  showUserForm = false;
+  newUser: AppUser = { username: '', password: '', role: 'USER' };
+
+  readonly roles = ['USER', 'EDITOR', 'WEBMASTER'];
+
+  constructor(private gameService: GameService, private userService: UserService) {}
 
   ngOnInit(): void {
     this.loadPending();
     this.loadApproved();
+    this.loadUsers();
   }
 
   loadPending(): void {
@@ -65,13 +75,8 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  startEdit(game: BoardGame): void {
-    this.editingGame = { ...game };
-  }
-
-  cancelEdit(): void {
-    this.editingGame = null;
-  }
+  startEdit(game: BoardGame): void { this.editingGame = { ...game }; }
+  cancelEdit(): void { this.editingGame = null; }
 
   saveEdit(): void {
     if (!this.editingGame) return;
@@ -85,24 +90,78 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  confirmDelete(game: BoardGame): void {
-    this.gameToDelete = game;
-  }
-
-  cancelDelete(): void {
-    this.gameToDelete = null;
-  }
+  confirmDelete(game: BoardGame): void { this.gameToDelete = game; }
+  cancelDelete(): void { this.gameToDelete = null; }
 
   delete(): void {
     if (!this.gameToDelete) return;
     const game = this.gameToDelete;
     this.gameToDelete = null;
     this.gameService.deleteGame(game.id!).subscribe({
-      next: () => {
-        this.message = `"${game.title}" supprimé.`;
-        this.loadApproved();
-      },
+      next: () => { this.message = `"${game.title}" supprimé.`; this.loadApproved(); },
       error: () => { this.message = 'Erreur lors de la suppression.'; }
     });
+  }
+
+  loadUsers(): void {
+    this.userService.getAll().subscribe({
+      next: (data) => { this.users = data; },
+      error: () => {}
+    });
+  }
+
+  openUserForm(): void {
+    this.newUser = { username: '', password: '', role: 'USER' };
+    this.showUserForm = true;
+  }
+
+  cancelUserForm(): void { this.showUserForm = false; }
+
+  createUser(): void {
+    if (!this.newUser.username || !this.newUser.password) return;
+    this.userService.create(this.newUser).subscribe({
+      next: () => {
+        this.message = `Utilisateur "${this.newUser.username}" créé.`;
+        this.showUserForm = false;
+        this.loadUsers();
+      },
+      error: (err) => { this.message = err?.error?.message || 'Erreur lors de la création.'; }
+    });
+  }
+
+  startEditUser(user: AppUser): void { this.editingUser = { ...user, password: '' }; }
+  cancelEditUser(): void { this.editingUser = null; }
+
+  saveEditUser(): void {
+    if (!this.editingUser) return;
+    this.userService.update(this.editingUser.id!, this.editingUser).subscribe({
+      next: () => {
+        this.message = `Utilisateur "${this.editingUser!.username}" mis à jour.`;
+        this.editingUser = null;
+        this.loadUsers();
+      },
+      error: () => { this.message = 'Erreur lors de la mise à jour.'; }
+    });
+  }
+
+  confirmDeleteUser(user: AppUser): void { this.userToDelete = user; }
+  cancelDeleteUser(): void { this.userToDelete = null; }
+
+  deleteUser(): void {
+    if (!this.userToDelete) return;
+    const user = this.userToDelete;
+    this.userToDelete = null;
+    this.userService.delete(user.id!).subscribe({
+      next: () => { this.message = `Utilisateur "${user.username}" supprimé.`; this.loadUsers(); },
+      error: () => { this.message = 'Erreur lors de la suppression.'; }
+    });
+  }
+
+  roleLabel(role: string): string {
+    switch (role) {
+      case 'WEBMASTER': return 'Admin';
+      case 'EDITOR': return 'Éditeur';
+      default: return 'Utilisateur';
+    }
   }
 }

@@ -15,7 +15,9 @@
       <input type="password" [(ngModel)]="password" placeholder="Mot de passe" (keyup.enter)="login()" />
     </div>
 
-    <button (click)="login()" class="btn-login">Se connecter</button>
+    <button (click)="login()" class="btn-login" [disabled]="loading">
+      {{ loading ? 'Connexion...' : 'Se connecter' }}
+    </button>
 
     <p class="back-link"><a routerLink="/">← Retour sans connexion</a></p>
 

@@ -1,4 +1,7 @@
 import { Injectable, signal } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 export type Role = 'USER' | 'EDITOR' | 'WEBMASTER';
 
@@ -8,21 +11,24 @@ export interface AuthUser {
   role: Role;
 }
 
-const ROLE_MAP: Record<string, Role> = {
-  user: 'USER',
-  editor: 'EDITOR',
-  admin: 'WEBMASTER',
-};
-
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private currentUser = signal<AuthUser | null>(null);
+  private apiUrl = 'http://localhost:8080/api/auth/me';
 
-  login(username: string, password: string): boolean {
-    const role = ROLE_MAP[username.toLowerCase()];
-    if (!role) return false;
-    this.currentUser.set({ username, password, role });
-    return true;
+  constructor(private http: HttpClient) {}
+
+  login(username: string, password: string): Observable<boolean> {
+    const header = 'Basic ' + btoa(`${username}:${password}`);
+    return this.http.get<{ username: string; role: string }>(this.apiUrl, {
+      headers: new HttpHeaders({ Authorization: header })
+    }).pipe(
+      map(user => {
+        this.currentUser.set({ username: user.username, password, role: user.role as Role });
+        return true;
+      }),
+      catchError(() => of(false))
+    );
   }
 
   logout(): void {

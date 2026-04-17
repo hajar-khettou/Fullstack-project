@@ -15,6 +15,7 @@ export class LoginComponent {
   username = '';
   password = '';
   error = '';
+  loading = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -23,11 +24,15 @@ export class LoginComponent {
       this.error = 'Veuillez remplir tous les champs.';
       return;
     }
-    const ok = this.authService.login(this.username, this.password);
-    if (ok) {
-      this.router.navigate(['/']);
-    } else {
-      this.error = 'Identifiant inconnu. Utilisez : user, editor ou admin.';
-    }
+    this.loading = true;
+    this.error = '';
+    this.authService.login(this.username, this.password).subscribe(ok => {
+      this.loading = false;
+      if (ok) {
+        this.router.navigate(['/']);
+      } else {
+        this.error = 'Identifiant ou mot de passe incorrect.';
+      }
+    });
   }
 }
