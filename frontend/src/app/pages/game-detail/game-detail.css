@@ -1,152 +1,228 @@
 .container {
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
-  padding: 2rem;
-  font-family: sans-serif;
+  padding: 2.5rem 2rem 3rem;
 }
 
 .btn-back {
-  display: inline-block;
-  margin-bottom: 1.5rem;
-  color: #3498db;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 1.75rem;
+  color: var(--primary);
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  background: rgba(99,102,241,0.08);
+  border-radius: 8px;
+  transition: all 0.18s;
+}
+
+.btn-back:hover {
+  background: rgba(99,102,241,0.15);
 }
 
 .detail-card {
-  border: 1px solid #eee;
-  border-radius: 12px;
+  background: var(--card);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
 }
 
 .detail-header {
   display: flex;
-  gap: 2rem;
-  padding: 2rem;
+  gap: 2.5rem;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
 }
 
 .detail-header img {
-  width: 200px;
-  height: 200px;
+  width: 210px;
+  height: 210px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 14px;
+  flex-shrink: 0;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.detail-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .detail-info h1 {
-  font-size: 1.8rem;
-  color: #2c3e50;
-  margin: 0 0 1rem;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  margin-bottom: 0.25rem;
 }
 
 .meta {
-  color: #7f8c8d;
-  margin: 0.3rem 0;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 500;
 }
 
-.rating {
-  font-size: 1.1rem;
-  color: #f39c12 !important;
-  font-weight: bold;
+.meta.rating {
+  font-size: 1.05rem;
+  color: #d97706;
+  font-weight: 700;
+  margin-top: 0.2rem;
 }
 
 .description {
-  margin-top: 1rem;
-  line-height: 1.6;
-  color: #34495e;
+  margin-top: 0.75rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+  font-size: 0.93rem;
 }
-
-.rating-form {
-  padding: 2rem;
-  border-top: 1px solid #eee;
-  background: #f9f9f9;
-}
-
-.rating-form h2 {
-  margin: 0 0 1.5rem;
-  color: #2c3e50;
-}
-
-.form-group {
-  margin-bottom: 1.2rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.4rem;
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-}
-
-.btn-submit {
-  padding: 0.75rem 2rem;
-  background: #3498db;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.success {
-  padding: 1rem;
-  background: #d5f5e3;
-  border-radius: 8px;
-  color: #27ae60;
-  font-weight: bold;
-}
-
-.error-msg {
-  padding: 0.75rem 1rem;
-  background: #fdecea;
-  color: #e74c3c;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-
-.info-msg {
-  padding: 0.75rem 1rem;
-  background: #eaf4fd;
-  color: #2980b9;
-  border-radius: 8px;
-}
-
-.info-msg a { color: #2980b9; font-weight: bold; }
 
 .ratings-section {
-  padding: 2rem;
-  border-top: 1px solid #eee;
+  padding: 2rem 2.5rem;
+  border-top: 1px solid var(--border);
 }
 
 .ratings-section h2 {
-  margin: 0 0 1.2rem;
-  color: #2c3e50;
+  margin: 0 0 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
 }
 
 .rating-item {
-  padding: 1rem;
-  background: #f9f9f9;
-  border-radius: 8px;
-  margin-bottom: 0.8rem;
+  padding: 1rem 1.25rem;
+  background: #f8fafc;
+  border-radius: 10px;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--border);
 }
 
 .rating-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.35rem;
 }
 
-.rating-user { font-weight: bold; color: #2c3e50; }
-.rating-score { color: #f39c12; font-weight: bold; }
-.rating-comment { margin: 0; color: #555; font-size: 0.95rem; }
+.rating-user {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+
+.rating-score {
+  color: #d97706;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.rating-comment {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.rating-form {
+  padding: 2rem 2.5rem;
+  border-top: 1px solid var(--border);
+  background: #f8fafc;
+}
+
+.rating-form h2 {
+  margin: 0 0 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.92rem;
+  color: var(--text);
+  background: white;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+}
+
+.btn-submit {
+  padding: 0.8rem 2.2rem;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.93rem;
+  font-weight: 700;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+}
+
+.btn-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99,102,241,0.45);
+}
+
+.success {
+  padding: 1rem 1.25rem;
+  background: #ecfdf5;
+  border-radius: 10px;
+  color: var(--success);
+  font-weight: 600;
+  border: 1px solid rgba(16,185,129,0.2);
+}
+
+.error-msg {
+  padding: 0.8rem 1rem;
+  background: #fef2f2;
+  color: var(--danger);
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  font-size: 0.88rem;
+  border: 1px solid rgba(239,68,68,0.2);
+}
+
+.info-msg {
+  padding: 0.9rem 1.1rem;
+  background: #eff6ff;
+  color: #3b82f6;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border: 1px solid rgba(59,130,246,0.2);
+}
+
+.info-msg a {
+  color: var(--primary);
+  font-weight: 700;
+}

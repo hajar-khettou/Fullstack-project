@@ -65,6 +65,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/api/games/{id}").hasAnyRole("EDITOR", "WEBMASTER")
                 .requestMatchers(HttpMethod.DELETE, "/api/games/{id}").hasAnyRole("EDITOR", "WEBMASTER")
                 .requestMatchers("/actuator/**", "/h2-console/**").permitAll()
+                .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated()
             )
             .httpBasic(Customizer.withDefaults());
