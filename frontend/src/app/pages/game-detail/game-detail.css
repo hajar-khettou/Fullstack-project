@@ -293,3 +293,55 @@
   cursor: pointer;
   font-size: 0.85rem;
 }
+
+.ratings-count {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.rating-distribution {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dist-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dist-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  width: 3rem;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.dist-bar-wrap {
+  flex: 1;
+  background: var(--border);
+  border-radius: 99px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.dist-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #f97316);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+.dist-count {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  width: 1.5rem;
+  flex-shrink: 0;
+}

@@ -52,6 +52,15 @@ export class GameDetailComponent implements OnInit {
     });
   }
 
+  ratingCount(star: number): number {
+    return this.ratings.filter(r => r.score === star).length;
+  }
+
+  ratingPercent(star: number): number {
+    if (!this.ratings.length) return 0;
+    return (this.ratingCount(star) / this.ratings.length) * 100;
+  }
+
   isOwnRating(rating: Rating): boolean {
     return this.authService.isLoggedIn() && this.authService.getUser()?.username === rating.userId;
   }

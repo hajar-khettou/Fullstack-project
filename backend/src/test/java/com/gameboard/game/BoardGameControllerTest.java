@@ -45,7 +45,7 @@ class BoardGameControllerTest {
 
     @Test
     void getAll_publicAccess_returns200() throws Exception {
-        when(service.getApprovedGames(any(), any(), any(), any()))
+        when(service.getApprovedGames(any(), any(), any(), any(), any()))
                 .thenReturn(new PageImpl<>(List.of(sampleGame()), PageRequest.of(0, 12), 1));
 
         mockMvc.perform(get("/api/games"))

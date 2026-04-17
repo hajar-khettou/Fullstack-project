@@ -19,7 +19,19 @@
 
       @if (ratings.length > 0) {
         <div class="ratings-section">
-          <h2>Avis des joueurs</h2>
+          <h2>Avis des joueurs <span class="ratings-count">({{ ratings.length }})</span></h2>
+
+          <div class="rating-distribution">
+            @for (star of [5,4,3,2,1]; track star) {
+              <div class="dist-row">
+                <span class="dist-label">{{ star }} ⭐</span>
+                <div class="dist-bar-wrap">
+                  <div class="dist-bar" [style.width.%]="ratingPercent(star)"></div>
+                </div>
+                <span class="dist-count">{{ ratingCount(star) }}</span>
+              </div>
+            }
+          </div>
           @for (r of ratings; track r.id) {
             <div class="rating-item">
               @if (editingRating?.id === r.id) {

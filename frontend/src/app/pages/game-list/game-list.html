@@ -6,6 +6,7 @@
       <input type="text" [(ngModel)]="searchTitle" placeholder="🔍  Titre du jeu..." (keyup.enter)="search()" />
       <input type="text" [(ngModel)]="searchGenre" placeholder="🎭  Genre..." (keyup.enter)="search()" />
       <input type="number" [(ngModel)]="searchYear" placeholder="📅  Année..." (keyup.enter)="search()" />
+      <input type="number" [(ngModel)]="searchPlayers" placeholder="👥  Nb joueurs..." (keyup.enter)="search()" min="1" max="20" />
       <button (click)="search()">Rechercher</button>
     </div>
   </div>

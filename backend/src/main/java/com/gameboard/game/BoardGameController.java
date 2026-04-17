@@ -20,6 +20,7 @@ public class BoardGameController {
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String genre,
             @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer players,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
             @RequestParam(defaultValue = "title") String sortBy,
@@ -32,7 +33,7 @@ public class BoardGameController {
         Sort sort = direction.equalsIgnoreCase("desc")
                 ? Sort.by(column).descending()
                 : Sort.by(column).ascending();
-        return service.getApprovedGames(title, genre, year, PageRequest.of(page, size, sort));
+        return service.getApprovedGames(title, genre, year, players, PageRequest.of(page, size, sort));
     }
 
     @GetMapping("/my-proposals")

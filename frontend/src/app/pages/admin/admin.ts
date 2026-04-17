@@ -70,7 +70,7 @@ export class AdminComponent implements OnInit {
   }
 
   loadApproved(): void {
-    this.gameService.getGames(undefined, undefined, undefined, 0, 100).subscribe({
+    this.gameService.getGames(undefined, undefined, undefined, undefined, 0, 100).subscribe({
       next: (page: Page<BoardGame>) => { this.approvedGames = page.content; },
       error: () => {}
     });

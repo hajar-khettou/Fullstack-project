@@ -1,7 +1,6 @@
 package com.gameboard.game;
 
 import com.gameboard.bgg.BggClient;
-import com.gameboard.kafka.GameEventProducer;
 import com.gameboard.rating.RatingRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -110,9 +109,9 @@ class BoardGameServiceTest {
         game.setTitle("Catan");
         game.setStatus(BoardGame.Status.APPROVED);
         Page<BoardGame> page = new PageImpl<>(List.of(game));
-        when(repository.search(any(), any(), any(), any())).thenReturn(page);
+        when(repository.search(any(), any(), any(), any(), any())).thenReturn(page);
 
-        Page<BoardGame> result = service.getApprovedGames(null, null, null, PageRequest.of(0, 12));
+        Page<BoardGame> result = service.getApprovedGames(null, null, null, null, PageRequest.of(0, 12));
 
         assertThat(result.getContent()).hasSize(1);
         assertThat(result.getContent().get(0).getTitle()).isEqualTo("Catan");

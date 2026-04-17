@@ -22,9 +22,9 @@ public class BoardGameService {
     private final BggClient bggClient;
     private final Optional<GameEventProducer> kafkaProducer;
 
-    public Page<BoardGame> getApprovedGames(String title, String genre, Integer year, Pageable pageable) {
+    public Page<BoardGame> getApprovedGames(String title, String genre, Integer year, Integer players, Pageable pageable) {
         String yearStr = year != null ? year.toString() : null;
-        return repository.search(title, genre, yearStr, pageable);
+        return repository.search(title, genre, yearStr, players, pageable);
     }
 
     public List<BoardGame> getMyProposals(String username) {

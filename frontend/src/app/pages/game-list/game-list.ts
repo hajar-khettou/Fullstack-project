@@ -21,6 +21,7 @@ export class GameListComponent implements OnInit {
   searchTitle = '';
   searchGenre = '';
   searchYear: number | undefined;
+  searchPlayers: number | undefined;
   sortBy = 'title';
   direction = 'asc';
 
@@ -37,7 +38,7 @@ export class GameListComponent implements OnInit {
 
   loadGames(): void {
     this.loading = true;
-    this.gameService.getGames(this.searchTitle || undefined, this.searchGenre || undefined, this.searchYear, this.currentPage, this.pageSize, this.sortBy, this.direction).subscribe({
+    this.gameService.getGames(this.searchTitle || undefined, this.searchGenre || undefined, this.searchYear, this.searchPlayers, this.currentPage, this.pageSize, this.sortBy, this.direction).subscribe({
       next: (page: Page<BoardGame>) => {
         this.games = page.content;
         this.totalPages = page.totalPages;
