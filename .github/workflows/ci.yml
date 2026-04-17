@@ -1,13 +1,14 @@
-name: CI - GameBoard
+name: CI — GameBoard
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
 
 jobs:
-  build:
+  build-and-test:
+    name: Build & Test
     runs-on: ubuntu-latest
 
     steps:
@@ -22,11 +23,11 @@ jobs:
           cache: maven
           cache-dependency-path: backend/pom.xml
 
-      - name: Build with Maven
+      - name: Run tests
         working-directory: backend
         env:
           SPRING_PROFILES_ACTIVE: test
-        run: mvn verify
+        run: ./mvnw clean verify
 
-      - name: Build backend image
+      - name: Build Docker image
         run: docker build -t gameboard-backend:ci ./backend
