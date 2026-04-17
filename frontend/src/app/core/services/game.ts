@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { BoardGame } from '../../models/game.model';
+import { BoardGame, Page } from '../../models/game.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,23 +11,43 @@ export class GameService {
 
   constructor(private http: HttpClient) {}
 
-  // GET /api/games → liste des jeux approuvés
-  getGames(): Observable<BoardGame[]> {
-    return this.http.get<BoardGame[]>(this.apiUrl);
+  getGames(title?: string, genre?: string, year?: number, page = 0, size = 12): Observable<Page<BoardGame>> {
+    let params = new HttpParams().set('page', page).set('size', size);
+    if (title) params = params.set('title', title);
+    if (genre) params = params.set('genre', genre);
+    if (year) params = params.set('year', year);
+    return this.http.get<Page<BoardGame>>(this.apiUrl, { params });
   }
 
-  // GET /api/games/{id} → fiche détaillée
+  getMyProposals(): Observable<BoardGame[]> {
+    return this.http.get<BoardGame[]>(`${this.apiUrl}/my-proposals`);
+  }
+
   getGameById(id: number): Observable<BoardGame> {
     return this.http.get<BoardGame>(`${this.apiUrl}/${id}`);
   }
 
-  // GET /api/games/search?title=xxx → recherche
-  searchGames(title: string): Observable<BoardGame[]> {
-    return this.http.get<BoardGame[]>(`${this.apiUrl}/search?title=${title}`);
-  }
-
-  // POST /api/games → proposer un jeu
   proposeGame(game: BoardGame): Observable<BoardGame> {
     return this.http.post<BoardGame>(this.apiUrl, game);
+  }
+
+  getPendingGames(): Observable<BoardGame[]> {
+    return this.http.get<BoardGame[]>(`${this.apiUrl}/pending`);
+  }
+
+  updateStatus(id: number, status: string): Observable<BoardGame> {
+    return this.http.patch<BoardGame>(`${this.apiUrl}/${id}/status?status=${status}`, {});
+  }
+
+  deleteGame(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  updateGame(id: number, game: BoardGame): Observable<BoardGame> {
+    return this.http.put<BoardGame>(`${this.apiUrl}/${id}`, game);
+  }
+
+  importFromBgg(bggId: string): Observable<BoardGame> {
+    return this.http.post<BoardGame>(`${this.apiUrl}/bgg/${bggId}`, {});
   }
 }

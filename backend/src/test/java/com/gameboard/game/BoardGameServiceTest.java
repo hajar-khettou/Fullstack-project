@@ -2,15 +2,19 @@ package com.gameboard.game;
 
 import com.gameboard.bgg.BggClient;
 import com.gameboard.kafka.GameEventProducer;
+import com.gameboard.rating.RatingRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,13 +29,24 @@ class BoardGameServiceTest {
     private BoardGameRepository repository;
 
     @Mock
+    private RatingRepository ratingRepository;
+
+    @Mock
     private BggClient bggClient;
 
     private BoardGameService service;
 
     @BeforeEach
     void setUp() {
-        service = new BoardGameService(repository, bggClient, Optional.empty());
+        service = new BoardGameService(repository, ratingRepository, bggClient, Optional.empty());
+        var auth = new UsernamePasswordAuthenticationToken(
+                "editor", "password", List.of(new SimpleGrantedAuthority("ROLE_EDITOR")));
+        SecurityContextHolder.getContext().setAuthentication(auth);
+    }
+
+    @AfterEach
+    void tearDown() {
+        SecurityContextHolder.clearContext();
     }
 
     @Test
@@ -105,7 +120,14 @@ class BoardGameServiceTest {
 
     @Test
     void delete_callsRepository() {
+        BoardGame game = new BoardGame();
+        game.setId(1L);
+        game.setStatus(BoardGame.Status.PENDING);
+        game.setProposedBy("editor");
+        when(repository.findById(1L)).thenReturn(Optional.of(game));
+
         service.delete(1L);
+
         verify(repository).deleteById(1L);
     }
 

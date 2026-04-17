@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { GameService } from '../../core/services/game';
+import { AuthService } from '../../core/services/auth.service';
 import { BoardGame } from '../../models/game.model';
 
 @Component({
@@ -23,13 +24,18 @@ export class GameProposeComponent {
     year: new Date().getFullYear()
   };
 
-  submitted: boolean = false;
-  error: string = '';
+  submitted = false;
+  error = '';
 
   constructor(
     private gameService: GameService,
+    public authService: AuthService,
     private router: Router
   ) {}
+
+  canPropose(): boolean {
+    return this.authService.hasRole('EDITOR') || this.authService.hasRole('WEBMASTER');
+  }
 
   propose(): void {
     if (!this.game.title.trim()) {
@@ -43,8 +49,11 @@ export class GameProposeComponent {
         setTimeout(() => this.router.navigate(['/']), 3000);
       },
       error: (err) => {
-        console.error('Erreur proposition', err);
-        this.error = 'Une erreur est survenue, réessayez.';
+        if (err.status === 401 || err.status === 403) {
+          this.error = 'Vous devez être connecté en tant qu\'éditeur ou webmaster.';
+        } else {
+          this.error = 'Une erreur est survenue, réessayez.';
+        }
       }
     });
   }

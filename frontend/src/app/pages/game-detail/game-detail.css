@@ -105,3 +105,48 @@
   color: #27ae60;
   font-weight: bold;
 }
+
+.error-msg {
+  padding: 0.75rem 1rem;
+  background: #fdecea;
+  color: #e74c3c;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.info-msg {
+  padding: 0.75rem 1rem;
+  background: #eaf4fd;
+  color: #2980b9;
+  border-radius: 8px;
+}
+
+.info-msg a { color: #2980b9; font-weight: bold; }
+
+.ratings-section {
+  padding: 2rem;
+  border-top: 1px solid #eee;
+}
+
+.ratings-section h2 {
+  margin: 0 0 1.2rem;
+  color: #2c3e50;
+}
+
+.rating-item {
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 0.8rem;
+}
+
+.rating-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.rating-user { font-weight: bold; color: #2c3e50; }
+.rating-score { color: #f39c12; font-weight: bold; }
+.rating-comment { margin: 0; color: #555; font-size: 0.95rem; }

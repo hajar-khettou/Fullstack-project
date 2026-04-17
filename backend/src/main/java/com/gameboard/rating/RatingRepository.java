@@ -11,6 +11,8 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
 
     List<Rating> findByBoardGameId(Long boardGameId);
 
+    void deleteByBoardGameId(Long boardGameId);
+
     Optional<Rating> findByBoardGameIdAndUserId(Long boardGameId, String userId);
 
     @Query("SELECT AVG(r.score) FROM Rating r WHERE r.boardGame.id = :gameId")

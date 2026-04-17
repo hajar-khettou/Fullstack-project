@@ -17,10 +17,17 @@ public interface BoardGameRepository extends JpaRepository<BoardGame, Long> {
 
     Page<BoardGame> findByStatus(BoardGame.Status status, Pageable pageable);
 
-    @Query("SELECT g FROM BoardGame g WHERE g.status = 'APPROVED'" +
-           " AND (:genre IS NULL OR LOWER(g.genre) = LOWER(:genre))" +
-           " AND (:year IS NULL OR g.year = :year)" +
-           " AND (:title IS NULL OR LOWER(g.title) LIKE LOWER(CONCAT('%', :title, '%')))")
+    @Query(value = "SELECT * FROM board_games WHERE status = 'APPROVED'" +
+           " AND (CAST(:title AS TEXT) IS NULL OR title ILIKE CAST(CONCAT('%', :title, '%') AS TEXT))" +
+           " AND (CAST(:genre AS TEXT) IS NULL OR genre ILIKE CAST(:genre AS TEXT))" +
+           " AND (CAST(:year AS TEXT) IS NULL OR release_year = CAST(:year AS INTEGER))",
+           countQuery = "SELECT COUNT(*) FROM board_games WHERE status = 'APPROVED'" +
+           " AND (CAST(:title AS TEXT) IS NULL OR title ILIKE CAST(CONCAT('%', :title, '%') AS TEXT))" +
+           " AND (CAST(:genre AS TEXT) IS NULL OR genre ILIKE CAST(:genre AS TEXT))" +
+           " AND (CAST(:year AS TEXT) IS NULL OR release_year = CAST(:year AS INTEGER))",
+           nativeQuery = true)
     Page<BoardGame> search(@Param("title") String title, @Param("genre") String genre,
-                           @Param("year") Integer year, Pageable pageable);
+                           @Param("year") String year, Pageable pageable);
+
+    List<BoardGame> findByProposedBy(String proposedBy);
 }

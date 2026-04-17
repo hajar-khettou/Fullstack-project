@@ -11,7 +11,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/games")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class BoardGameController {
 
     private final BoardGameService service;
@@ -25,6 +24,11 @@ public class BoardGameController {
             @RequestParam(defaultValue = "12") int size) {
         return service.getApprovedGames(title, genre, year,
                 PageRequest.of(page, size, Sort.by("title").ascending()));
+    }
+
+    @GetMapping("/my-proposals")
+    public List<BoardGame> getMyProposals(java.security.Principal principal) {
+        return service.getMyProposals(principal.getName());
     }
 
     @GetMapping("/pending")

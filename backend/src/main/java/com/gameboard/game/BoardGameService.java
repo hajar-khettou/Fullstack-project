@@ -3,10 +3,13 @@ package com.gameboard.game;
 import com.gameboard.bgg.BggClient;
 import com.gameboard.bgg.BggGameDto;
 import com.gameboard.kafka.GameEventProducer;
+import com.gameboard.rating.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,11 +18,17 @@ import java.util.Optional;
 public class BoardGameService {
 
     private final BoardGameRepository repository;
+    private final RatingRepository ratingRepository;
     private final BggClient bggClient;
     private final Optional<GameEventProducer> kafkaProducer;
 
     public Page<BoardGame> getApprovedGames(String title, String genre, Integer year, Pageable pageable) {
-        return repository.search(title, genre, year, pageable);
+        String yearStr = year != null ? year.toString() : null;
+        return repository.search(title, genre, yearStr, pageable);
+    }
+
+    public List<BoardGame> getMyProposals(String username) {
+        return repository.findByProposedBy(username);
     }
 
     public List<BoardGame> getPendingGames() {
@@ -38,6 +47,8 @@ public class BoardGameService {
 
     public BoardGame create(BoardGame game) {
         game.setStatus(BoardGame.Status.PENDING);
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        game.setProposedBy(username);
         enrichFromBgg(game);
         BoardGame saved = repository.save(game);
         Long savedId = saved.getId();
@@ -74,6 +85,15 @@ public class BoardGameService {
 
     public BoardGame update(Long id, BoardGame updated) {
         BoardGame game = getById(id);
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean isWebmaster = SecurityContextHolder.getContext().getAuthentication()
+                .getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_WEBMASTER"));
+        if (!isWebmaster) {
+            if (game.getStatus() != BoardGame.Status.PENDING)
+                throw new IllegalStateException("Vous ne pouvez modifier qu'un jeu en attente.");
+            if (!username.equals(game.getProposedBy()))
+                throw new IllegalStateException("Vous ne pouvez modifier que vos propres propositions.");
+        }
         game.setTitle(updated.getTitle());
         game.setDescription(updated.getDescription());
         game.setImageUrl(updated.getImageUrl());
@@ -84,8 +104,21 @@ public class BoardGameService {
         return repository.save(game);
     }
 
+    @Transactional
     public void delete(Long id) {
-        if (id != null) repository.deleteById(id);
+        if (id == null) return;
+        BoardGame game = getById(id);
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean isWebmaster = SecurityContextHolder.getContext().getAuthentication()
+                .getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_WEBMASTER"));
+        if (!isWebmaster) {
+            if (game.getStatus() != BoardGame.Status.PENDING)
+                throw new IllegalStateException("Vous ne pouvez supprimer qu'un jeu en attente.");
+            if (!username.equals(game.getProposedBy()))
+                throw new IllegalStateException("Vous ne pouvez supprimer que vos propres propositions.");
+        }
+        ratingRepository.deleteByBoardGameId(id);
+        repository.deleteById(id);
     }
 
     private void enrichFromBgg(BoardGame game) {

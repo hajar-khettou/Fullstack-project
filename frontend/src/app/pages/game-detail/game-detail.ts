@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { GameService } from '../../core/services/game';
 import { RatingService } from '../../core/services/rating';
+import { AuthService } from '../../core/services/auth.service';
 import { BoardGame } from '../../models/game.model';
 import { Rating } from '../../models/rating.model';
 
@@ -17,20 +18,19 @@ import { Rating } from '../../models/rating.model';
 export class GameDetailComponent implements OnInit {
 
   game: BoardGame | null = null;
-  loading: boolean = false;
+  loading = false;
+  ratingError = '';
 
-  // Formulaire de notation
-  newRating: Rating = {
-    boardGameId: 0,
-    score: 5,
-    comment: ''
-  };
-  ratingSubmitted: boolean = false;
+  newRating: Rating = { boardGameId: 0, score: 5, comment: '' };
+  ratingSubmitted = false;
+
+  ratings: Rating[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private gameService: GameService,
-    private ratingService: RatingService
+    private ratingService: RatingService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -41,20 +41,31 @@ export class GameDetailComponent implements OnInit {
       next: (data) => {
         this.game = data;
         this.loading = false;
+        this.ratingService.getRatings(id).subscribe({
+          next: (r) => { this.ratings = r; },
+          error: () => {}
+        });
       },
-      error: (err) => {
-        console.error('Erreur chargement jeu', err);
-        this.loading = false;
-      }
+      error: () => { this.loading = false; }
     });
   }
 
   submitRating(): void {
+    this.ratingError = '';
+    const user = this.authService.getUser();
+    if (user) this.newRating.userId = user.username;
+
     this.ratingService.rateGame(this.newRating.boardGameId, this.newRating).subscribe({
-      next: () => {
-        this.ratingSubmitted = true;
-      },
-      error: (err) => console.error('Erreur notation', err)
+      next: () => { this.ratingSubmitted = true; },
+      error: (err) => {
+        if (err.status === 401 || err.status === 403) {
+          this.ratingError = 'Vous devez être connecté pour noter un jeu.';
+        } else if (err.status === 409) {
+          this.ratingError = 'Vous avez déjà noté ce jeu.';
+        } else {
+          this.ratingError = 'Une erreur est survenue, réessayez.';
+        }
+      }
     });
   }
 }

@@ -15,4 +15,8 @@ export class RatingService {
   rateGame(gameId: number, rating: Rating): Observable<Rating> {
     return this.http.post<Rating>(`${this.apiUrl}/${gameId}/ratings`, rating);
   }
+
+  getRatings(gameId: number): Observable<Rating[]> {
+    return this.http.get<Rating[]>(`${this.apiUrl}/${gameId}/ratings`);
+  }
 }

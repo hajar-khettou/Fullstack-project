@@ -93,3 +93,12 @@ h1 {
   color: #e74c3c;
   margin-bottom: 1rem;
 }
+
+.info-msg {
+  padding: 1rem;
+  background: #eaf4fd;
+  color: #2980b9;
+  border-radius: 8px;
+}
+
+.info-msg a { color: #2980b9; font-weight: bold; }

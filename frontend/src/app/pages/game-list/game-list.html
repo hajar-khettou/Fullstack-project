@@ -2,14 +2,10 @@
   <h1>🎲 GameYo</h1>
   <p class="subtitle">Découvrez et notez vos jeux de société</p>
 
-  <!-- Barre de recherche -->
   <div class="search-bar">
-    <input
-      type="text"
-      [(ngModel)]="searchTerm"
-      placeholder="Rechercher un jeu..."
-      (keyup.enter)="search()"
-    />
+    <input type="text" [(ngModel)]="searchTitle" placeholder="Titre..." (keyup.enter)="search()" />
+    <input type="text" [(ngModel)]="searchGenre" placeholder="Genre..." (keyup.enter)="search()" />
+    <input type="number" [(ngModel)]="searchYear" placeholder="Année..." (keyup.enter)="search()" />
     <button (click)="search()">Rechercher</button>
   </div>
 
@@ -17,23 +13,34 @@
     <a routerLink="/propose" class="btn-propose">+ Proposer un jeu</a>
   </div>
 
-  <!-- Chargement -->
-  <p *ngIf="loading">Chargement...</p>
+  @if (loading) { <p>Chargement...</p> }
 
-  <!-- Liste des jeux -->
   <div class="game-grid">
-    <div class="game-card" *ngFor="let game of games">
-      <img [src]="game.imageUrl || 'assets/placeholder.png'" [alt]="game.title" />
-      <div class="game-info">
-        <h2>{{ game.title }}</h2>
-        <p class="year">{{ game.year }}</p>
-        <p class="players">👥 {{ game.minPlayers }} - {{ game.maxPlayers }} joueurs</p>
-        <p class="rating">⭐ {{ game.averageRating | number:'1.1-1' }}</p>
-        <a [routerLink]="['/games', game.id]" class="btn-detail">Voir la fiche</a>
+    @for (game of games; track game.id) {
+      <div class="game-card">
+        <img [src]="game.imageUrl || 'assets/placeholder.png'" [alt]="game.title" />
+        <div class="game-info">
+          <h2>{{ game.title }}</h2>
+          <p class="year">{{ game.year }}</p>
+          <p class="players">👥 {{ game.minPlayers }} - {{ game.maxPlayers }} joueurs</p>
+          <p class="rating">⭐ {{ game.averageRating | number:'1.1-1' }}</p>
+          <a [routerLink]="['/games', game.id]" class="btn-detail">Voir la fiche</a>
+        </div>
       </div>
-    </div>
+    }
   </div>
 
-  <!-- Aucun résultat -->
-  <p *ngIf="!loading && games.length === 0">Aucun jeu trouvé.</p>
+  @if (!loading && games.length === 0) {
+    <p>Aucun jeu trouvé.</p>
+  }
+
+  @if (totalPages > 1) {
+    <div class="pagination">
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 0">‹</button>
+      @for (p of pages; track p) {
+        <button (click)="goToPage(p)" [class.active]="p === currentPage">{{ p + 1 }}</button>
+      }
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages - 1">›</button>
+    </div>
+  }
 </div>

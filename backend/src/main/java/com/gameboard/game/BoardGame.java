@@ -19,6 +19,7 @@ public class BoardGame {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
     private String genre;
     private Integer minPlayers;
@@ -31,6 +32,8 @@ public class BoardGame {
 
     @Enumerated(EnumType.STRING)
     private Status status = Status.PENDING;
+
+    private String proposedBy;
 
     public enum Status {
         PENDING, APPROVED, REJECTED

@@ -8,7 +8,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/games/{gameId}/ratings")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class RatingController {
 
     private final RatingService service;

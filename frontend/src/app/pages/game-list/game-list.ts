@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { GameService } from '../../core/services/game';
-import { BoardGame } from '../../models/game.model';
+import { BoardGame, Page } from '../../models/game.model';
 
 @Component({
   selector: 'app-game-list',
@@ -15,8 +15,16 @@ import { BoardGame } from '../../models/game.model';
 export class GameListComponent implements OnInit {
 
   games: BoardGame[] = [];
-  searchTerm: string = '';
-  loading: boolean = false;
+  loading = false;
+
+  searchTitle = '';
+  searchGenre = '';
+  searchYear: number | undefined;
+
+  currentPage = 0;
+  totalPages = 0;
+  totalElements = 0;
+  pageSize = 12;
 
   constructor(private gameService: GameService) {}
 
@@ -26,26 +34,29 @@ export class GameListComponent implements OnInit {
 
   loadGames(): void {
     this.loading = true;
-    this.gameService.getGames().subscribe({
-      next: (data) => {
-        this.games = data;
+    this.gameService.getGames(this.searchTitle || undefined, this.searchGenre || undefined, this.searchYear, this.currentPage, this.pageSize).subscribe({
+      next: (page: Page<BoardGame>) => {
+        this.games = page.content;
+        this.totalPages = page.totalPages;
+        this.totalElements = page.totalElements;
         this.loading = false;
       },
-      error: (err) => {
-        console.error('Erreur chargement jeux', err);
-        this.loading = false;
-      }
+      error: () => { this.loading = false; }
     });
   }
 
   search(): void {
-    if (this.searchTerm.trim() === '') {
-      this.loadGames();
-      return;
-    }
-    this.gameService.searchGames(this.searchTerm).subscribe({
-      next: (data) => this.games = data,
-      error: (err) => console.error('Erreur recherche', err)
-    });
+    this.currentPage = 0;
+    this.loadGames();
+  }
+
+  goToPage(page: number): void {
+    if (page < 0 || page >= this.totalPages) return;
+    this.currentPage = page;
+    this.loadGames();
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i);
   }
 }

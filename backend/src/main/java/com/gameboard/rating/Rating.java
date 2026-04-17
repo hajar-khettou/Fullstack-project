@@ -1,5 +1,6 @@
 package com.gameboard.rating;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gameboard.game.BoardGame;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -16,6 +17,7 @@ public class Rating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_game_id", nullable = false)
     private BoardGame boardGame;
