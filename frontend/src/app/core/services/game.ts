@@ -11,8 +11,8 @@ export class GameService {
 
   constructor(private http: HttpClient) {}
 
-  getGames(title?: string, genre?: string, year?: number, page = 0, size = 12): Observable<Page<BoardGame>> {
-    let params = new HttpParams().set('page', page).set('size', size);
+  getGames(title?: string, genre?: string, year?: number, page = 0, size = 12, sortBy = 'title', direction = 'asc'): Observable<Page<BoardGame>> {
+    let params = new HttpParams().set('page', page).set('size', size).set('sortBy', sortBy).set('direction', direction);
     if (title) params = params.set('title', title);
     if (genre) params = params.set('genre', genre);
     if (year) params = params.set('year', year);

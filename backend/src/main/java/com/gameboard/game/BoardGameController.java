@@ -21,9 +21,18 @@ public class BoardGameController {
             @RequestParam(required = false) String genre,
             @RequestParam(required = false) Integer year,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "12") int size) {
-        return service.getApprovedGames(title, genre, year,
-                PageRequest.of(page, size, Sort.by("title").ascending()));
+            @RequestParam(defaultValue = "12") int size,
+            @RequestParam(defaultValue = "title") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction) {
+        String column = switch (sortBy) {
+            case "averageRating" -> "average_rating";
+            case "year" -> "release_year";
+            default -> "title";
+        };
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(column).descending()
+                : Sort.by(column).ascending();
+        return service.getApprovedGames(title, genre, year, PageRequest.of(page, size, sort));
     }
 
     @GetMapping("/my-proposals")

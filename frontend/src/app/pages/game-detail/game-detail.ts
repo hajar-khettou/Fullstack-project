@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 import { GameService } from '../../core/services/game';
 import { RatingService } from '../../core/services/rating';
 import { AuthService } from '../../core/services/auth.service';
@@ -25,6 +26,7 @@ export class GameDetailComponent implements OnInit {
   ratingSubmitted = false;
 
   ratings: Rating[] = [];
+  editingRating: Rating | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -47,6 +49,48 @@ export class GameDetailComponent implements OnInit {
         });
       },
       error: () => { this.loading = false; }
+    });
+  }
+
+  isOwnRating(rating: Rating): boolean {
+    return this.authService.isLoggedIn() && this.authService.getUser()?.username === rating.userId;
+  }
+
+  startEditRating(rating: Rating): void {
+    this.editingRating = { ...rating };
+  }
+
+  cancelEditRating(): void {
+    this.editingRating = null;
+  }
+
+  saveEditRating(): void {
+    if (!this.editingRating || !this.game) return;
+    this.ratingService.updateRating(this.game.id!, this.editingRating.id!, this.editingRating).subscribe({
+      next: () => {
+        this.editingRating = null;
+        this.reloadRatingsAndGame();
+      },
+      error: () => { this.ratingError = 'Erreur lors de la modification.'; }
+    });
+  }
+
+  deleteRating(rating: Rating): void {
+    if (!this.game) return;
+    this.ratingService.deleteRating(this.game.id!, rating.id!).subscribe({
+      next: () => { this.reloadRatingsAndGame(); },
+      error: () => { this.ratingError = 'Erreur lors de la suppression.'; }
+    });
+  }
+
+  private reloadRatingsAndGame(): void {
+    const id = this.game!.id!;
+    forkJoin({
+      ratings: this.ratingService.getRatings(id),
+      game: this.gameService.getGameById(id)
+    }).subscribe({
+      next: ({ ratings, game }) => { this.ratings = ratings; this.game = game; },
+      error: () => { this.ratingError = 'Erreur lors du chargement.'; }
     });
   }
 

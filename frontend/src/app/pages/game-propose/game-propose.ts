@@ -34,7 +34,7 @@ export class GameProposeComponent {
   ) {}
 
   canPropose(): boolean {
-    return this.authService.hasRole('EDITOR') || this.authService.hasRole('WEBMASTER');
+    return this.authService.hasRoleOrHigher('EDITOR');
   }
 
   propose(): void {

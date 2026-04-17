@@ -226,3 +226,70 @@
   color: var(--primary);
   font-weight: 700;
 }
+
+.rating-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.rating-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 0.3rem;
+}
+
+.btn-edit-rating, .btn-delete-rating {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.btn-edit-rating:hover { background: #e0e7ff; }
+.btn-delete-rating:hover { background: #fee2e2; }
+
+.rating-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rating-edit-form select,
+.rating-edit-form textarea {
+  padding: 0.5rem;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+
+.rating-edit-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-save {
+  padding: 0.4rem 1rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.btn-cancel {
+  padding: 0.4rem 1rem;
+  background: var(--border);
+  color: var(--text);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}

@@ -44,6 +44,17 @@
         <h2>Gestion des jeux</h2>
       </div>
 
+      <div class="bgg-import">
+        <h3 class="section-title">Importer depuis BGG</h3>
+        <div class="bgg-form">
+          <input type="text" [(ngModel)]="bggId" placeholder="ID BoardGameGeek (ex: 13)" />
+          <button class="btn-bgg" (click)="importFromBgg()" [disabled]="bggLoading">
+            {{ bggLoading ? 'Import...' : '⬇️ Importer' }}
+          </button>
+        </div>
+        @if (bggMessage) { <p class="bgg-msg">{{ bggMessage }}</p> }
+      </div>
+
       <h3 class="section-title">En attente de validation</h3>
       @if (loading) { <p class="empty">Chargement...</p> }
       @if (!loading && pendingGames.length === 0) {

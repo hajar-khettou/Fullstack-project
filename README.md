@@ -24,7 +24,7 @@ Projet Fullstack S8 — EPITA APC
 |--------|-------------|
 | Backend | Java 21 · Spring Boot 3.5 · Spring Data JPA · Spring Security |
 | Messaging | Apache Kafka · Topic `game-imported` |
-| Base de données | PostgreSQL 15 (prod) · H2 (tests) |
+| Base de données | Neon PostgreSQL (cloud partagé) · H2 (tests) |
 | API externe | BoardGameGeek XML API v2 |
 | Frontend | Angular 21 · TypeScript |
 | DevOps | Docker · docker-compose · GitHub Actions |
@@ -32,53 +32,58 @@ Projet Fullstack S8 — EPITA APC
 
 ---
 
+## Base de données partagée (Neon)
+
+La base de données est hébergée sur **[Neon](https://neon.tech)** (cloud PostgreSQL gratuit). Elle est **partagée entre tous les membres de l'équipe** — pas besoin d'installer PostgreSQL localement.
+
+- Les connexions sont déjà configurées dans `application-local.properties` et `application-docker.properties`
+- Au premier démarrage, 15 jeux de société sont insérés automatiquement
+- Les jeux ajoutés via l'app (et approuvés par un admin) sont visibles par tout le monde en temps réel
+
+---
+
 ## Prérequis
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (inclut Docker Compose)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (inclut Docker Compose) — pour Kafka uniquement
 - [Node.js 20+](https://nodejs.org/) + Angular CLI (`npm install -g @angular/cli`)
-- Java 21 (pour lancer le backend hors Docker)
+- Java 21 (pour lancer le backend)
 
 ---
 
 ## Lancement from scratch
 
-### Option 1 — Stack complète en Docker (recommandé)
+### Option 1 — Backend en local + Kafka Docker (recommandé)
 
 ```bash
 git clone https://github.com/hajar-khettou/Fullstack-project.git
 cd Fullstack-project
 
-docker-compose up --build -d
-```
+# Démarrer Kafka uniquement (la base est sur Neon, pas besoin de postgres local)
+docker-compose up -d zookeeper kafka
 
-| Service | URL | Description |
-|---------|-----|-------------|
-| Backend API | http://localhost:8080 | Spring Boot |
-| Swagger UI | http://localhost:8080/swagger-ui/index.html | Documentation API |
-| PostgreSQL | localhost:5432 | Base `gameboard` |
-| Kafka (externe) | localhost:9093 | Broker |
+# Lancer le backend
+cd backend
+./mvnw spring-boot:run
 
-Puis lancer le frontend :
-
-```bash
+# Lancer le frontend (dans un autre terminal)
 cd frontend
 npm install
 ng serve
 ```
 
-Frontend disponible sur **http://localhost:4200**
+| Service | URL |
+|---------|-----|
+| Frontend | http://localhost:4200 |
+| Backend API | http://localhost:8080 |
+| Swagger UI | http://localhost:8080/swagger-ui/index.html |
 
 ---
 
-### Option 2 — Backend en local (développement)
+### Option 2 — Stack complète en Docker
 
 ```bash
-# Démarrer uniquement l'infra Docker
-docker-compose up -d postgres zookeeper kafka
-
-# Lancer le backend
-cd backend
-./mvnw spring-boot:run
+docker-compose up --build -d
+cd frontend && npm install && ng serve
 ```
 
 ---

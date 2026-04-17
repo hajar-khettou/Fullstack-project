@@ -18,7 +18,21 @@
     } @else {
       <p></p>
     }
-    <a routerLink="/propose" class="btn-propose">+ Proposer un jeu</a>
+    <div class="top-bar-right">
+      <div class="sort-controls">
+        <select [(ngModel)]="sortBy" (change)="search()">
+          <option value="title">Titre</option>
+          <option value="averageRating">Note</option>
+          <option value="year">Année</option>
+        </select>
+        <button class="btn-direction" (click)="direction = direction === 'asc' ? 'desc' : 'asc'; search()">
+          {{ direction === 'asc' ? '↑' : '↓' }}
+        </button>
+      </div>
+      @if (authService.hasRoleOrHigher('EDITOR')) {
+        <a routerLink="/propose" class="btn-propose">+ Proposer un jeu</a>
+      }
+    </div>
   </div>
 
   @if (loading) {
@@ -65,8 +79,12 @@
   @if (totalPages > 1) {
     <div class="pagination">
       <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 0">‹</button>
-      @for (p of pages; track p) {
-        <button (click)="goToPage(p)" [class.active]="p === currentPage">{{ p + 1 }}</button>
+      @for (p of visiblePages; track p) {
+        @if (p === -1) {
+          <span class="pagination-ellipsis">…</span>
+        } @else {
+          <button (click)="goToPage(p)" [class.active]="p === currentPage">{{ p + 1 }}</button>
+        }
       }
       <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages - 1">›</button>
     </div>

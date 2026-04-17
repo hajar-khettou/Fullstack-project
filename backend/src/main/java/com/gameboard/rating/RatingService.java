@@ -19,6 +19,38 @@ public class RatingService {
     }
 
     @Transactional
+    public Rating updateRating(Long gameId, Long ratingId, Rating updated, String username) {
+        Rating rating = ratingRepository.findById(ratingId)
+                .orElseThrow(() -> new RuntimeException("Note introuvable"));
+        if (rating.getUserId() == null || !username.equals(rating.getUserId()))
+            throw new IllegalStateException("Vous ne pouvez modifier que votre propre note");
+        rating.setScore(updated.getScore());
+        rating.setComment(updated.getComment());
+        Rating saved = ratingRepository.save(rating);
+        recalculateAverage(gameId);
+        return saved;
+    }
+
+    @Transactional
+    public void deleteRating(Long gameId, Long ratingId, String username) {
+        Rating rating = ratingRepository.findById(ratingId)
+                .orElseThrow(() -> new RuntimeException("Note introuvable"));
+        if (rating.getUserId() == null || !username.equals(rating.getUserId()))
+            throw new IllegalStateException("Vous ne pouvez supprimer que votre propre note");
+        ratingRepository.deleteById(ratingId);
+        recalculateAverage(gameId);
+    }
+
+    private void recalculateAverage(Long gameId) {
+        boardGameRepository.findById(gameId).ifPresent(game -> {
+            game.setAverageRating(ratingRepository.calculateAverageByGameId(gameId)
+                    .map(avg -> Math.round(avg * 10.0) / 10.0)
+                    .orElse(null));
+            boardGameRepository.save(game);
+        });
+    }
+
+    @Transactional
     public Rating addRating(Long gameId, Rating rating) {
         BoardGame game = boardGameRepository.findById(gameId)
                 .orElseThrow(() -> new RuntimeException("Jeu introuvable : " + gameId));
@@ -34,13 +66,7 @@ public class RatingService {
 
         rating.setBoardGame(game);
         Rating saved = ratingRepository.save(rating);
-
-        ratingRepository.calculateAverageByGameId(gameId)
-                .ifPresent(avg -> {
-                    game.setAverageRating(Math.round(avg * 10.0) / 10.0);
-                    boardGameRepository.save(game);
-                });
-
+        recalculateAverage(gameId);
         return saved;
     }
 }

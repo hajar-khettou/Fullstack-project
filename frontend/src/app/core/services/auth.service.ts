@@ -47,6 +47,13 @@ export class AuthService {
     return this.currentUser()?.role === role;
   }
 
+  hasRoleOrHigher(role: Role): boolean {
+    const user = this.currentUser();
+    if (!user) return false;
+    const levels: Record<Role, number> = { USER: 1, EDITOR: 2, WEBMASTER: 3 };
+    return levels[user.role] >= levels[role];
+  }
+
   getBasicAuthHeader(): string | null {
     const user = this.currentUser();
     if (!user) return null;

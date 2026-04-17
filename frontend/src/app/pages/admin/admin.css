@@ -15,6 +15,12 @@
   align-items: start;
 }
 
+@media (max-width: 768px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .admin-col {
   background: var(--card);
   border: 1px solid var(--border);
