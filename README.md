@@ -8,13 +8,11 @@ Projet Fullstack S8 — EPITA APC
 
 ## Équipe
 
-| Nom | Rôle |
-|-----|------|
-| Amina SERRANO | - |
-| Christina LOPES | - |
-| Hajar KHETTOU | [@hajar-khettou](https://github.com/hajar-khettou) |
-| Lyna MEDJEDOUB | - |
-| Rawane OUFFA | - |
+- Amina SERRANO
+- Christina LOPES
+- Hajar KHETTOU
+- Lyna MEDJEDOUB
+- Rawane OUFFA
 
 **Encadrant** : David THIBAU — david.thibau@gmail.com
 
