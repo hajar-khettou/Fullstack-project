@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { GameService } from '../../core/services/game';
 import { AuthService } from '../../core/services/auth.service';
@@ -30,10 +30,13 @@ export class GameListComponent implements OnInit {
   totalElements = 0;
   pageSize = 12;
 
-  constructor(private gameService: GameService, public authService: AuthService) {}
+  constructor(private gameService: GameService, public authService: AuthService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.loadGames();
+    this.route.queryParams.subscribe(params => {
+      if (params['genre']) this.searchGenre = params['genre'];
+      this.loadGames();
+    });
   }
 
   loadGames(): void {

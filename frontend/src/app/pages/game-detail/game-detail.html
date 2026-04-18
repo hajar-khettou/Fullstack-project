@@ -1,26 +1,71 @@
 <div class="container">
-  <a routerLink="/" class="btn-back">← Retour à la liste</a>
+  <nav class="breadcrumb">
+    <a routerLink="/">Accueil</a>
+    <span class="sep">›</span>
+    <a routerLink="/">Catalogue</a>
+    @if (game) {
+      <span class="sep">›</span>
+      <span class="current">{{ game.title }}</span>
+    }
+  </nav>
 
-  @if (loading) { <p>Chargement...</p> }
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Chargement...</p>
+    </div>
+  }
 
   @if (game) {
     <div class="detail-card">
+
       <div class="detail-header">
-        <img [src]="game.imageUrl || 'assets/placeholder.png'" [alt]="game.title" />
-        <div class="detail-info">
+        <div class="image-col">
+          <img [src]="game.imageUrl || 'assets/placeholder.png'" [alt]="game.title" />
+          @if (game.genre) {
+            <span class="genre-badge">{{ game.genre }}</span>
+          }
+        </div>
+
+        <div class="info-col">
           <h1>{{ game.title }}</h1>
-          @if (game.genre) { <p class="meta">🎭 {{ game.genre }}</p> }
-          <p class="meta">📅 {{ game.year }}</p>
-          <p class="meta">👥 {{ game.minPlayers }} - {{ game.maxPlayers }} joueurs</p>
-          <p class="meta rating">⭐ {{ game.averageRating | number:'1.1-1' }} / 5</p>
-          <p class="description">{{ game.description }}</p>
+
+          <div class="rating-hero">
+            <span class="star-big">★</span>
+            <span class="rating-num">{{ game.averageRating | number:'1.1-1' }}</span>
+            <span class="rating-denom">/ 5</span>
+            <span class="rating-count">({{ ratings.length }} avis)</span>
+          </div>
+
+          <div class="badges">
+            <div class="badge">
+              <span class="badge-icon">👥</span>
+              <span class="badge-label">{{ game.minPlayers }}–{{ game.maxPlayers }} joueurs</span>
+            </div>
+            <div class="badge">
+              <span class="badge-icon">📅</span>
+              <span class="badge-label">{{ game.year }}</span>
+            </div>
+            @if (game.genre) {
+              <div class="badge">
+                <span class="badge-icon">🎭</span>
+                <span class="badge-label">{{ game.genre }}</span>
+              </div>
+            }
+          </div>
+
+          @if (game.description) {
+            <div class="description-block">
+              <h3>Description</h3>
+              <p>{{ game.description }}</p>
+            </div>
+          }
         </div>
       </div>
 
       @if (ratings.length > 0) {
         <div class="ratings-section">
           <h2>Avis des joueurs <span class="ratings-count">({{ ratings.length }})</span></h2>
-
           <div class="rating-distribution">
             @for (star of [5,4,3,2,1]; track star) {
               <div class="dist-row">
@@ -71,7 +116,6 @@
 
       <div class="rating-form">
         <h2>Noter ce jeu</h2>
-
         @if (!authService.isLoggedIn()) {
           <div class="info-msg">
             🔒 <a routerLink="/login">Connectez-vous</a> pour noter ce jeu.
