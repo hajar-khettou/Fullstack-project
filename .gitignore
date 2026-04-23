@@ -29,4 +29,4 @@ frontend/cypress/downloads/
 .DS_Store
 Thumbs.db
 
-.env
+.envbackend/src/main/resources/application-local.properties
