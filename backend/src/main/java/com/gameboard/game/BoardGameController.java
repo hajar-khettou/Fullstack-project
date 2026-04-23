@@ -51,17 +51,19 @@ public class BoardGameController {
         return ResponseEntity.ok(service.getById(id));
     }
 
+    @GetMapping("/bgg/search")
+    public ResponseEntity<?> searchBgg(@RequestParam String title) {
+        return service.searchBgg(title)
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<BoardGame> create(@RequestBody BoardGame game) {
         return ResponseEntity.ok(service.create(game));
     }
 
-    @PostMapping("/bgg/{bggId}")
-    public ResponseEntity<BoardGame> importFromBgg(@PathVariable String bggId) {
-        return ResponseEntity.ok(service.importFromBgg(bggId));
-    }
-
-    @PatchMapping("/{id}/status")
+@PatchMapping("/{id}/status")
     public ResponseEntity<BoardGame> updateStatus(
             @PathVariable Long id,
             @RequestParam BoardGame.Status status) {

@@ -58,23 +58,8 @@ public class BoardGameService {
         return saved;
     }
 
-    public BoardGame importFromBgg(String bggId) {
-        BggGameDto dto = bggClient.fetchByBggId(bggId)
-                .orElseThrow(() -> new RuntimeException("Jeu introuvable sur BGG : " + bggId));
-        BoardGame game = new BoardGame();
-        game.setTitle(dto.getTitle());
-        game.setDescription(dto.getDescription());
-        game.setImageUrl(dto.getImageUrl());
-        game.setMinPlayers(dto.getMinPlayers());
-        game.setMaxPlayers(dto.getMaxPlayers());
-        game.setYear(dto.getYear());
-        game.setStatus(BoardGame.Status.APPROVED);
-        BoardGame saved = repository.save(game);
-        Long savedId = saved.getId();
-        if (savedId != null) {
-            kafkaProducer.ifPresent(p -> p.sendGameImported(savedId, saved.getTitle(), "manual"));
-        }
-        return saved;
+    public Optional<BggGameDto> searchBgg(String title) {
+        return bggClient.searchBggId(title).flatMap(bggClient::fetchByBggId);
     }
 
     public BoardGame updateStatus(Long id, BoardGame.Status status) {

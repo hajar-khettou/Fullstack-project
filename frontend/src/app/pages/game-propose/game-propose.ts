@@ -27,12 +27,6 @@ export class GameProposeComponent {
   submitted = false;
   error = '';
 
-  // ← Variables BGG ajoutées ici
-  bggTitle: string = '';
-  loadingBgg: boolean = false;
-  bggError: string = '';
-  bggSuccess: boolean = false;
-
   constructor(
     private gameService: GameService,
     public authService: AuthService,
@@ -41,35 +35,6 @@ export class GameProposeComponent {
 
   canPropose(): boolean {
     return this.authService.hasRoleOrHigher('EDITOR');
-  }
-
-  // ← Méthode autoFill ajoutée ici
-  autoFill(): void {
-    if (!this.bggTitle.trim()) {
-      this.bggError = 'Entrez un titre pour la recherche BGG.';
-      return;
-    }
-    this.loadingBgg = true;
-    this.bggError = '';
-    this.bggSuccess = false;
-
-    //this.gameService.importFromBgg(this.bggTitle).subscribe({
-    this.gameService.proposeGame({ title: this.bggTitle }).subscribe({
-      next: (data) => {
-        this.game.title = data.title || this.bggTitle;
-        this.game.description = data.description || '';
-        this.game.imageUrl = data.imageUrl || '';
-        this.game.minPlayers = data.minPlayers || 2;
-        this.game.maxPlayers = data.maxPlayers || 4;
-        this.game.year = data.year || new Date().getFullYear();
-        this.bggSuccess = true;
-        this.loadingBgg = false;
-      },
-      error: () => {
-        this.bggError = 'Jeu introuvable sur BoardGameGeek. Remplissez manuellement.';
-        this.loadingBgg = false;
-      }
-    });
   }
 
   propose(): void {

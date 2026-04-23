@@ -23,31 +23,6 @@
         <div class="error">⚠️ {{ error }}</div>
       }
 
-      <!-- BGG EN HAUT -->
-      <div class="bgg-section">
-        <h3>🔍 Auto-complétion via BoardGameGeek</h3>
-        <p class="hint">Entrez le titre exact du jeu pour remplir automatiquement le formulaire</p>
-        <div class="bgg-row">
-          <input
-            type="text"
-            [(ngModel)]="bggTitle"
-            placeholder="Ex: Catan, Pandemic, Ticket to Ride..."
-          />
-          <button (click)="autoFill()" [disabled]="loadingBgg">
-            {{ loadingBgg ? 'Recherche...' : '✨ Auto-remplir' }}
-          </button>
-        </div>
-        @if (bggError) {
-          <p class="bgg-error">{{ bggError }}</p>
-        }
-        @if (bggSuccess) {
-          <p class="bgg-success">✅ Données récupérées depuis BoardGameGeek !</p>
-        }
-      </div>
-
-      <hr />
-
-      <!-- FORMULAIRE EN BAS -->
       <div class="form-group">
         <label>Titre du jeu *</label>
         <input type="text" [(ngModel)]="game.title" placeholder="Ex: Catan, Pandemic..." />

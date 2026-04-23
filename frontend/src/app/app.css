@@ -122,19 +122,21 @@
   flex-direction: column;
 }
 
-.dropdown-item {
+.dropdown-item,
+.nav-links .dropdown-item {
   padding: 0.6rem 0.9rem;
   border-radius: 8px;
-  color: #374151;
+  color: #374151 !important;
   text-decoration: none;
   font-size: 0.88rem;
   font-weight: 500;
   transition: background 0.15s;
 }
 
-.dropdown-item:hover {
+.dropdown-item:hover,
+.nav-links .dropdown-item:hover {
   background: #f5f3ff;
-  color: #6366f1;
+  color: #6366f1 !important;
 }
 
 .dropdown-divider {

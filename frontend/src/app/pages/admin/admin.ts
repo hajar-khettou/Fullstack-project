@@ -20,11 +20,7 @@ export class AdminComponent implements OnInit {
   loading = false;
   message = '';
 
-  bggId = '';
-  bggLoading = false;
-  bggMessage = '';
-
-  editingGame: BoardGame | null = null;
+editingGame: BoardGame | null = null;
   gameToDelete: BoardGame | null = null;
 
   users: AppUser[] = [];
@@ -43,25 +39,7 @@ export class AdminComponent implements OnInit {
     this.loadUsers();
   }
 
-  importFromBgg(): void {
-    if (!this.bggId.trim()) return;
-    this.bggLoading = true;
-    this.bggMessage = '';
-    this.gameService.importFromBgg(this.bggId.trim()).subscribe({
-      next: (game) => {
-        this.bggMessage = `✅ "${game.title}" importé avec succès !`;
-        this.bggId = '';
-        this.bggLoading = false;
-        this.loadApproved();
-      },
-      error: () => {
-        this.bggMessage = '❌ ID introuvable sur BoardGameGeek.';
-        this.bggLoading = false;
-      }
-    });
-  }
-
-  loadPending(): void {
+loadPending(): void {
     this.loading = true;
     this.gameService.getPendingGames().subscribe({
       next: (data) => { this.pendingGames = data; this.loading = false; },

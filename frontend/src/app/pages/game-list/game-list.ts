@@ -34,7 +34,8 @@ export class GameListComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      if (params['genre']) this.searchGenre = params['genre'];
+      this.searchGenre = params['genre'] || '';
+      this.currentPage = 0;
       this.loadGames();
     });
   }

@@ -54,6 +54,13 @@ export class AuthService {
     return levels[user.role] >= levels[role];
   }
 
+  register(username: string, password: string): Observable<{ success: boolean; error?: string }> {
+    return this.http.post<any>('http://localhost:8080/api/auth/register', { username, password }).pipe(
+      map(() => ({ success: true })),
+      catchError(err => of({ success: false, error: err.error?.error || 'Erreur lors de l\'inscription.' }))
+    );
+  }
+
   getBasicAuthHeader(): string | null {
     const user = this.currentUser();
     if (!user) return null;

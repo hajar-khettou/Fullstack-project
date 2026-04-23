@@ -1,5 +1,8 @@
 package com.gameboard.bgg;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.*;
@@ -14,9 +17,18 @@ public class BggClient {
     private static final String BGG_API = "https://boardgamegeek.com/xmlapi2/thing?id=%s&stats=1";
     private final RestTemplate restTemplate = new RestTemplate();
 
+    private HttpEntity<Void> requestWithHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("User-Agent", "GameBoard/1.0 (EPITA project; contact@gameboard.local)");
+        headers.set("Accept", "application/xml");
+        return new HttpEntity<>(headers);
+    }
+
     public Optional<BggGameDto> fetchByBggId(String bggId) {
         try {
-            String xml = restTemplate.getForObject(String.format(BGG_API, bggId), String.class);
+            String xml = restTemplate.exchange(
+                String.format(BGG_API, bggId), HttpMethod.GET, requestWithHeaders(), String.class
+            ).getBody();
             if (xml == null) return Optional.empty();
 
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -69,7 +81,9 @@ public class BggClient {
         try {
             String url = "https://boardgamegeek.com/xmlapi2/search?query=" +
                     title.replace(" ", "+") + "&type=boardgame&exact=1";
-            String xml = restTemplate.getForObject(url, String.class);
+            String xml = restTemplate.exchange(
+                url, HttpMethod.GET, requestWithHeaders(), String.class
+            ).getBody();
             if (xml == null) return Optional.empty();
 
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
