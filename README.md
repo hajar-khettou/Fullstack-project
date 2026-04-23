@@ -204,6 +204,7 @@ Neon permet à toute l'équipe de partager la même base de données sans instal
 H2 est une base de données en mémoire — elle démarre et s'arrête avec les tests, sans Docker, sans configuration. Cela permet de lancer `./mvnw test` n'importe où, y compris dans la CI GitHub Actions.
 
 ### Flux d'une requête (exemple : liste des jeux)
+```
 Navigateur Angular
 │  GET http://localhost:8080/api/games
 ▼
@@ -223,6 +224,7 @@ Spring                        → convertit en JSON automatiquement
 │
 ▼
 Navigateur Angular            → affiche les cartes jeux
+```
 
 ### Profils Spring
 Le projet utilise deux profils :
