@@ -160,6 +160,77 @@ consulter [docs/USER_GUIDE.md](docs/USER_GUIDE.md))
 
 ---
 
+## Modèle de données
+
+### BoardGame
+| Champ | Type | Description |
+|-------|------|-------------|
+| `id` | Long (PK) | Identifiant auto-généré |
+| `title` | String | Titre du jeu — obligatoire (`@NotBlank`) |
+| `description` | Text | Description longue (source BGG) |
+| `imageUrl` | String | URL image de couverture (source BGG) |
+| `minPlayers` | Integer | Nombre minimum de joueurs |
+| `maxPlayers` | Integer | Nombre maximum de joueurs |
+| `year` | Integer | Année de publication |
+| `averageRating` | Double | Moyenne des notes, calculée dynamiquement |
+| `status` | Enum | `PENDING` (défaut) / `APPROVED` / `REJECTED` |
+
+### Rating
+| Champ | Type | Description |
+|-------|------|-------------|
+| `id` | Long (PK) | Identifiant auto-généré |
+| `boardGameId` | Long (FK) | Référence vers `BoardGame` |
+| `userId` | String | Identifiant utilisateur (nullable si anonyme) |
+| `score` | Integer | Note de 1 à 5 |
+| `comment` | String | Commentaire libre (optionnel) |
+| `createdAt` | LocalDateTime | Date/heure automatique à la création |
+
+### Relation
+BoardGame (1) ──────< Rating (N)
+Un jeu peut avoir plusieurs notes.
+Une note appartient à un seul jeu.
+
+---
+
+## Choix techniques
+
+### Pourquoi Spring Security Basic Auth ?
+Auth0 aurait été plus complet mais plus complexe à mettre en place dans le temps imparti. Basic Auth avec Spring Security permet de gérer les 3 rôles (`user`, `editor`, `admin`) simplement, avec une sécurisation des endpoints par annotation (`@PreAuthorize`).
+
+### Pourquoi Neon (PostgreSQL cloud) ?
+Neon permet à toute l'équipe de partager la même base de données sans installer PostgreSQL localement. Seul Kafka reste en Docker. Cela simplifie l'onboarding d'un nouveau développeur.
+
+### Pourquoi H2 pour les tests ?
+H2 est une base de données en mémoire — elle démarre et s'arrête avec les tests, sans Docker, sans configuration. Cela permet de lancer `./mvnw test` n'importe où, y compris dans la CI GitHub Actions.
+
+### Flux d'une requête (exemple : liste des jeux)
+Navigateur Angular
+│  GET http://localhost:8080/api/games
+▼
+BoardGameController.java      → reçoit la requête HTTP
+│  appelle
+▼
+BoardGameService.java         → applique la logique métier
+│  appelle                  (filtre status = APPROVED)
+▼
+BoardGameRepository.java      → requête SQL via JPA
+│
+▼
+Neon PostgreSQL               → retourne les lignes
+│
+▼
+Spring                        → convertit en JSON automatiquement
+│
+▼
+Navigateur Angular            → affiche les cartes jeux
+
+### Profils Spring
+Le projet utilise deux profils :
+- **`local`** — connecté à Neon (base partagée). Lancer avec `-Dspring-boot.run.profiles=local`
+- **`test`** — connecté à H2 en mémoire. Activé automatiquement par `./mvnw test`
+
+---
+
 ## API — Documentation Swagger
 
 Disponible sur **http://localhost:8080/swagger-ui/index.html**
