@@ -104,7 +104,7 @@ cd frontend && npm install && ng serve
 
 ## Documentation utilisateur
 (Pour le guide d'utilisation détaillé par profil, 
-consulter (docs/USER_GUIDE.md))
+consulter [docs/USER_GUIDE.md](docs/USER_GUIDE.md))
 
 ### Utilisateur
 - Catalogue paginé avec recherche (titre, genre, année, nombre de joueurs)
