@@ -51,4 +51,8 @@ export class GameService {
   importFromBgg(bggId: string): Observable<BoardGame> {
     return this.http.post<BoardGame>(`${this.apiUrl}/bgg/${bggId}`, {});
   }
+
+  searchBgg(title: string): Observable<BoardGame> {
+    return this.http.get<BoardGame>(`${this.apiUrl}/bgg/search?title=${title}`);
+  }
 }

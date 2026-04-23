@@ -130,4 +130,63 @@ h1 {
   border: 1px solid rgba(59,130,246,0.2);
 }
 
+.bgg-section {
+  background: #eaf4fb;
+  border: 1px solid #aed6f1;
+  border-radius: 10px;
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.bgg-section h3 {
+  margin: 0 0 0.3rem;
+  color: #2980b9;
+}
+
+.hint {
+  color: #7f8c8d;
+  font-size: 0.85rem;
+  margin-bottom: 0.8rem;
+}
+
+.bgg-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.bgg-row input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #aed6f1;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.bgg-row button {
+  padding: 0.75rem 1.2rem;
+  background: #2980b9;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.bgg-row button:disabled {
+  background: #aed6f1;
+  cursor: not-allowed;
+}
+
+.bgg-error {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.bgg-success {
+  color: #27ae60;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
 .info-msg a { color: var(--primary); font-weight: 700; }
