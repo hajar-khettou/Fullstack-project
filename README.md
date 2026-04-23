@@ -194,6 +194,11 @@ Une note appartient à un seul jeu.
 
 ## Choix techniques
 
+### Intégration BoardGameGeek
+L'intégration BGG permet l'auto-complétion des fiches jeux (titre, description, image, joueurs, année). 
+
+> ⚠️ **Note** : Depuis avril 2026, BGG a restreint l'accès public à son API XML et requiert désormais une authentification. Donc cette option est désactivée.
+
 ### Pourquoi Spring Security Basic Auth ?
 Auth0 aurait été plus complet mais plus complexe à mettre en place dans le temps imparti. Basic Auth avec Spring Security permet de gérer les 3 rôles (`user`, `editor`, `admin`) simplement, avec une sécurisation des endpoints par annotation (`@PreAuthorize`).
 
